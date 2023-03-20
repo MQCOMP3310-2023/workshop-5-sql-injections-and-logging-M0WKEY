@@ -83,6 +83,8 @@ public class App {
         // Check if the input string is a valid 4-letter lowercase string
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match
         if (!guess.matches("^[a-z]{4}$")) {
+
+            logger.log(Level.SEVERE, "Invalid guess: " + guess); // log invalid guess at a severe level
             // If not, print an error message and continue with the loop
             System.out.println("Sorry, that input is not acceptable. Please enter a 4-letter string that consists only of lowercase letters a-z.\n");
             continue;
@@ -100,7 +102,8 @@ public class App {
     }
         } catch (NoSuchElementException | IllegalStateException e) {
             // Catch any exceptions that may occur while reading input from the scanner
-            e.printStackTrace();
+            logger.log(Level.WARNING, "Exception occurred while reading input from scanner.", e);
+}
         }
     }
 }
