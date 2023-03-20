@@ -56,7 +56,8 @@ public class App {
             String line;
             int i = 1;
             while ((line = br.readLine()) != null) {
-                System.out.println(line);
+                // this prints out everyword in the list 
+                // System.out.println(line);
                 wordleDatabaseConnection.addValidWord(i, line);
                 i++;
             }
@@ -69,25 +70,37 @@ public class App {
 
         // let's get them to enter a word
 
-        try (Scanner scanner = new Scanner(System.in)) {
-            System.out.print("Enter a 4 letter word for a guess or q to quit: ");
-            String guess = scanner.nextLine();
+        // Create a new scanner object to read user input from the console
+    try (Scanner scanner = new Scanner(System.in)) {
+    String guess = "";
 
-            while (!guess.equals("q")) {
-                System.out.println("You've guessed '" + guess+"'.");
+    // Start a loop that runs until the user enters 'q' to quit
+    while (!guess.equals("q")) {
+        // Prompt the user to enter a 4-letter string or 'q' to quit
+        System.out.print("Enter a 4 letter word for a guess or q to quit: ");
+        guess = scanner.nextLine();
 
-                if (wordleDatabaseConnection.isValidWord(guess)) { 
-                    System.out.println("Success! It is in the the list.\n");
-                }else{
-                    System.out.println("Sorry. This word is NOT in the the list.\n");
-                }
+        // Check if the input string is a valid 4-letter lowercase string
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match
+        if (!guess.matches("^[a-z]{4}$")) {
+            // If not, print an error message and continue with the loop
+            System.out.println("Sorry, that input is not acceptable. Please enter a 4-letter string that consists only of lowercase letters a-z.\n");
+            continue;
+        }
+        // If the input string is valid, print the guess and check if it is a valid word
+        System.out.println("You've guessed '" + guess+"'.");
 
-                System.out.print("Enter a 4 letter word for a guess or q to quit: " );
-                guess = scanner.nextLine();
-            }
+        if (wordleDatabaseConnection.isValidWord(guess)) { 
+            // If it is a valid word, print a success message
+            System.out.println("Success! It is in the the list.\n");
+        } else {
+            // If it is not a valid word, print a failure message
+            System.out.println("Sorry. This word is NOT in the the list.\n");
+        }
+    }
         } catch (NoSuchElementException | IllegalStateException e) {
+            // Catch any exceptions that may occur while reading input from the scanner
             e.printStackTrace();
         }
-
     }
 }

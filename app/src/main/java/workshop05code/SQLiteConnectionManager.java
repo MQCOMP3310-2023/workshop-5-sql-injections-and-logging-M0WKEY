@@ -127,14 +127,24 @@ public class SQLiteConnectionManager {
      */
     public void addValidWord(int id, String word) {
 
-        String sql = "INSERT INTO validWords(id,word) VALUES(?, ?)";
+          // Define the SQL query as a parameterized statement
+    String sql = "INSERT INTO validWords(id,word) VALUES(?, ?)";
 
     try (Connection conn = DriverManager.getConnection(databaseURL);
          PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+        // Set the values for the placeholders in the query
+        // The first placeholder is for the id parameter, which should be an integer
         pstmt.setInt(1, id);
+        
+        // The second placeholder is for the word parameter, which should be a string
         pstmt.setString(2, word);
+
+        // Execute the query to insert the new word into the database
         pstmt.executeUpdate();
+
     } catch (SQLException e) {
+        // Print any error messages to the console
         System.out.println(e.getMessage());
     }
 }
@@ -146,21 +156,32 @@ public class SQLiteConnectionManager {
      * @return true if guess exists in the database, false otherwise
      */
     public boolean isValidWord(String guess) {
-        String sql = "SELECT count(id) as total FROM validWords WHERE word like ?";
+        // Define the SQL query as a parameterized statement
+    String sql = "SELECT count(id) as total FROM validWords WHERE word like ?";
 
-        try (Connection conn = DriverManager.getConnection(databaseURL);
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, guess);
-            ResultSet resultRows = stmt.executeQuery();
-            if (resultRows.next()) {
-                int result = resultRows.getInt("total");
-                return (result >= 1);
-            }
-    
-            return false;
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            return false;
+    try (Connection conn = DriverManager.getConnection(databaseURL);
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        // Set the value for the placeholder in the query
+        // The placeholder is for the guess parameter, which should be a string
+        stmt.setString(1, guess);
+
+        // Execute the query to count the number of matching words in the database
+        ResultSet resultRows = stmt.executeQuery();
+        if (resultRows.next()) {
+            int result = resultRows.getInt("total");
+            return (result >= 1);
+        }
+
+        // If the query did not return any rows, the guess is not a valid word
+        return false;
+
+    } catch (SQLException e) {
+        // Print any error messages to the console
+        System.out.println(e.getMessage());
+
+        // If an error occurs, assume the guess is not a valid word
+        return false;
         }
     }
 }
