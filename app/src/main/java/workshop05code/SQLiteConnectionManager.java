@@ -29,6 +29,10 @@ public class SQLiteConnectionManager {
     }
 
     private static final Logger logger = Logger.getLogger(SQLiteConnectionManager.class.getName());
+    static {
+        logger.setLevel(Level.SEVERE);
+    }
+    
     //End code logging exercise
     
     private String databaseURL = "";
@@ -144,8 +148,8 @@ public class SQLiteConnectionManager {
         pstmt.executeUpdate();
 
     } catch (SQLException e) {
-        // Print any error messages to the console
-        System.out.println(e.getMessage());
+        // logs any error messages
+        logger.log(Level.SEVERE, "Error adding valid word to database", e);
     }
 }
 
@@ -177,8 +181,8 @@ public class SQLiteConnectionManager {
         return false;
 
     } catch (SQLException e) {
-        // Print any error messages to the console
-        System.out.println(e.getMessage());
+        
+        logger.log(Level.SEVERE, "An exception occurred", e);
 
         // If an error occurs, assume the guess is not a valid word
         return false;
